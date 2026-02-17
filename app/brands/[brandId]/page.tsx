@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import Image from "next/image";
@@ -9,8 +7,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import AddToCart from "@/components/AddToCart/AddToCart";
-import { useSession } from "next-auth/react";
-import Loading from "@/app/(pages)/products/loading"; 
+import Loading from "@/app/(pages)/products/loading";
+
 interface Brand {
   _id: string;
   name: string;
@@ -49,7 +47,6 @@ interface Props {
 }
 
 export default function BrandDetailsPage({ params }: Props) {
-  const { data: session } = useSession();
   const [brandId, setBrandId] = useState<string>("");
   const [brand, setBrand] = useState<Brand | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
@@ -106,8 +103,8 @@ export default function BrandDetailsPage({ params }: Props) {
     ));
 
   if (loading) {
-  return <Loading />;
-}
+    return <Loading />;
+  }
 
   if (!brand) {
     return (
@@ -184,14 +181,9 @@ export default function BrandDetailsPage({ params }: Props) {
                 </div>
               </CardContent>
 
-              {session?.accessToken && (
-                <div className="px-4 pb-4">
-                  <AddToCart
-                    productId={product._id}
-                    token={session.accessToken}
-                  />
-                </div>
-              )}
+              <div className="px-4 pb-4">
+                <AddToCart productId={product._id} />
+              </div>
             </Card>
           ))}
         </div>
