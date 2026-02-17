@@ -13,10 +13,11 @@ import CheckOutSession from "../CheckOutSession/CheckOutSession";
 interface CartProps {
   cartData: CartRes | null;
   token: string;
+  userId?: string | null;
 }
 
-export default function Cart({ cartData, token }: CartProps) {
-  const router = useRouter();
+export default function Cart({ cartData, token, userId }: CartProps) {
+    const router = useRouter();
   const [isClearing, setIsClearing] = useState(false);
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
 
