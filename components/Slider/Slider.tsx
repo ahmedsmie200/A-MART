@@ -11,14 +11,14 @@ import Autoplay from "embla-carousel-autoplay";
 interface ProductCarouselProps {
   images: string[];
   title: string;
-  sizes?: string; 
+  sizes?: string;
 }
 
 export default function Slider({ images = [], title, sizes = "100vw" }: ProductCarouselProps) {
   if (!images || images.length === 0) {
     return (
-      <div className="w-full h-96 flex items-center justify-center bg-gray-50 rounded-lg">
-        <p className="text-gray-400">No images available</p>
+      <div className="w-full h-96 flex items-center justify-center bg-muted/20 rounded-lg">
+        <p className="text-muted-foreground">No images available</p>
       </div>
     );
   }
@@ -32,12 +32,12 @@ export default function Slider({ images = [], title, sizes = "100vw" }: ProductC
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>
-            <div className="relative aspect-square bg-gray-50 rounded-lg">
+            <div className="relative aspect-square bg-muted/20 rounded-lg">
               <Image
                 src={image}
                 alt={`${title} - Image ${index + 1}`}
                 fill
-                sizes={sizes} 
+                sizes={sizes}
                 className="object-contain p-4"
                 priority={index === 0}
               />

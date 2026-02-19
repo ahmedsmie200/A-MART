@@ -29,7 +29,7 @@ export default function WishlistButton({ productId }: WishlistButtonProps) {
 
     try {
       const localWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      
+
       if (newState) {
         // Add to wishlist
         if (!localWishlist.includes(productId)) {
@@ -78,17 +78,15 @@ export default function WishlistButton({ productId }: WishlistButtonProps) {
     <button
       onClick={toggleWishlist}
       disabled={isLoading}
-      className={`p-3 border rounded-lg transition-colors ${
-        isInWishlist
-          ? "bg-red-50 border-red-300 hover:bg-red-100"
-          : "border-gray-300 hover:bg-gray-50"
-      } disabled:opacity-50`}
+      className={`p-3 border rounded-lg transition-colors ${isInWishlist
+        ? "bg-red-50 border-red-500 hover:bg-red-100"
+        : "border-muted-foreground/20 hover:bg-muted"
+        } disabled:opacity-50`}
       aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
     >
       <Heart
-        className={`w-5 h-5 ${
-          isInWishlist ? "text-red-500 fill-red-500" : "text-gray-600"
-        }`}
+        className={`w-5 h-5 ${isInWishlist ? "text-red-500 fill-red-500" : "text-muted-foreground"
+          }`}
       />
     </button>
   );

@@ -9,14 +9,14 @@ import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 
 interface Props {
-  params: Promise<{ productId: string }>; 
+  params: Promise<{ productId: string }>;
 }
 
 export default async function ProductDetails({ params }: Props) {
-  const { productId } = await params; 
-  
+  const { productId } = await params;
+
   const session = await getServerSession(authOptions);
-  
+
   const res = await fetch(
     `https://ecommerce.routemisr.com/api/v1/products/${productId}`,
     { cache: 'no-store' }
@@ -32,23 +32,22 @@ export default async function ProductDetails({ params }: Props) {
     [...Array(5)].map((_, index) => (
       <Star
         key={index}
-        className={`w-5 h-5 ${
-          index < Math.floor(rating)
-            ? 'text-yellow-400 fill-yellow-400'
-            : 'text-gray-300 fill-gray-300'
-        }`}
+        className={`w-4 h-4 sm:w-5 sm:h-5 ${index < Math.floor(rating)
+          ? 'text-yellow-400 fill-yellow-400'
+          : 'text-gray-300 fill-gray-300'
+          }`}
       />
     ));
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-6">Product Details</h2>
+    <div className="container mx-auto px-3 py-4 sm:px-6 sm:py-6">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Product Details</h2>
 
       <Card className="overflow-hidden">
-        <CardContent className="p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            
-            <div className="flex items-center justify-center bg-gray-50 rounded-lg p-8">
+        <CardContent className="p-4 sm:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
+
+            <div className="flex items-center justify-center bg-muted/20 rounded-lg p-4 sm:p-8">
               <Slider
                 images={product.images || []}
                 title={product.title || 'Product'}
@@ -56,29 +55,29 @@ export default async function ProductDetails({ params }: Props) {
               />
             </div>
 
-            <div className="flex flex-col justify-center space-y-4">
-              <p className="text-sm text-gray-500">
+            <div className="flex flex-col justify-center space-y-3 sm:space-y-4">
+              <p className="text-sm text-muted-foreground">
                 {product.brand?.name || 'No Brand'}
               </p>
 
-              <h1 className="text-2xl font-bold text-gray-900 leading-relaxed">
+              <h1 className="text-xl sm:text-2xl font-bold text-card-foreground leading-relaxed">
                 {product.title}
               </h1>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {product.category?.name || 'No Category'}
               </p>
 
-              <p className="text-gray-600 leading-relaxed pt-2">
+              <p className="text-muted-foreground leading-relaxed pt-2">
                 {product.description}
               </p>
 
               <div className="flex items-center gap-2 pt-2">
                 <div className="flex">{renderStars(product.ratingsAverage || 0)}</div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-muted-foreground">
                   {product.ratingsAverage || 0}
                 </span>
-                <span className="text-base font-bold text-gray-900 ml-auto">
+                <span className="text-base font-bold text-card-foreground ml-auto">
                   {product.price} EGP
                 </span>
               </div>

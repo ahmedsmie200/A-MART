@@ -17,7 +17,7 @@ interface CartProps {
 }
 
 export default function Cart({ cartData, token, userId }: CartProps) {
-    const router = useRouter();
+  const router = useRouter();
   const [isClearing, setIsClearing] = useState(false);
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
 
@@ -133,7 +133,7 @@ export default function Cart({ cartData, token, userId }: CartProps) {
   };
 
   return <>
-    {cart ? 
+    {cart ?
       <div className="container mx-auto px-4 py-6">
         <h1 className="text-3xl font-bold tracking-tight">Shopping Cart</h1>
         <p className="text-muted-foreground mt-1">
@@ -145,11 +145,11 @@ export default function Cart({ cartData, token, userId }: CartProps) {
             {cart.products?.map((item) => {
               const product = typeof item.product === 'string' ? null : item.product;
               const isUpdating = updatingItems.has(item.product as string);
-              
+
               if (!product) {
                 return (
                   <div key={item._id} className="flex gap-4 rounded-xl border p-4 shadow-sm bg-card">
-                    <div className="w-24 h-24 bg-gray-200 rounded-lg animate-pulse" />
+                    <div className="w-24 h-24 bg-muted rounded-lg animate-pulse" />
                     <div className="flex-1">
                       <p className="text-sm text-muted-foreground">Loading product details...</p>
                     </div>
@@ -157,77 +157,77 @@ export default function Cart({ cartData, token, userId }: CartProps) {
                 );
               }
 
-             return (
-  <div key={item._id} className="flex gap-4 rounded-xl border p-4 shadow-sm bg-card relative">
-    {isUpdating && (
-      <div className="absolute inset-0 bg-white/50 flex items-center justify-center rounded-xl">
-        <Loader2 className="animate-spin" />
-      </div>
-    )}
-    
-    <img 
-      src={product.imageCover}
-      alt={product.title}
-      className="w-24 h-24 rounded-lg object-cover md:w-28 md:h-28"
-    />
+              return (
+                <div key={item._id} className="flex gap-4 rounded-xl border p-4 shadow-sm bg-card relative">
+                  {isUpdating && (
+                    <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-xl">
+                      <Loader2 className="animate-spin" />
+                    </div>
+                  )}
 
-    <div className="flex-1">
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-        <div className="min-w-0">
-          <h3 className="font-semibold text-base md:text-lg line-clamp-2">
-            {product.title}
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            {product.brand?.name} · {product.category?.name}
-          </p>
-        </div>
+                  <img
+                    src={product.imageCover}
+                    alt={product.title}
+                    className="w-24 h-24 rounded-lg object-cover md:w-28 md:h-28"
+                  />
 
-        <div className="text-right shrink-0">
-          <div className="font-semibold">
-            {formatCurrency(item.price)}
-          </div>
-        </div>
-      </div>
+                  <div className="flex-1">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-base md:text-lg line-clamp-2">
+                          {product.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {product.brand?.name} · {product.category?.name}
+                        </p>
+                      </div>
 
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-         
-          <button
-            onClick={() => updateQuantity(product._id, item.count - 1)}
-            disabled={isUpdating || item.count <= 1}
-            aria-label="decrease"
-            className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            -
-          </button>
-          
-          <span className="w-6 text-center font-medium">
-            {item.count}
-          </span>
-          
-        
-          <button
-            onClick={() => updateQuantity(product._id, item.count + 1)}
-            disabled={isUpdating}
-            aria-label="increase"
-            className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            +
-          </button>
-        </div>
+                      <div className="text-right shrink-0">
+                        <div className="font-semibold">
+                          {formatCurrency(item.price)}
+                        </div>
+                      </div>
+                    </div>
 
-      
-        <button
-          onClick={() => removeItem(product._id)}
-          disabled={isUpdating}
-          className="text-sm text-destructive hover:underline disabled:opacity-50"
-        >
-          Remove
-        </button>
-      </div>
-    </div>
-  </div>
-);
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+
+                        <button
+                          onClick={() => updateQuantity(product._id, item.count - 1)}
+                          disabled={isUpdating || item.count <= 1}
+                          aria-label="decrease"
+                          className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          -
+                        </button>
+
+                        <span className="w-6 text-center font-medium">
+                          {item.count}
+                        </span>
+
+
+                        <button
+                          onClick={() => updateQuantity(product._id, item.count + 1)}
+                          disabled={isUpdating}
+                          aria-label="increase"
+                          className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          +
+                        </button>
+                      </div>
+
+
+                      <button
+                        onClick={() => removeItem(product._id)}
+                        disabled={isUpdating}
+                        className="text-sm text-destructive hover:underline disabled:opacity-50"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
             })}
           </div>
 
@@ -263,7 +263,7 @@ export default function Cart({ cartData, token, userId }: CartProps) {
                   Continue Shopping
                 </Button>
               </Link>
-              <CheckOutSession cartId={cartData.cartId || ''}/>
+              <CheckOutSession cartId={cartData.cartId || ''} />
 
               <button
                 onClick={handleClearCart}
@@ -276,6 +276,6 @@ export default function Cart({ cartData, token, userId }: CartProps) {
           </div>
         </div>
       </div>
-    : null}
+      : null}
   </>
 }

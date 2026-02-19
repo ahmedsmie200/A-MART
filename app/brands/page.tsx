@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import Loading from "@/app/(pages)/products/loading"; 
+import Loading from "@/app/(pages)/products/loading";
 
 interface Brand {
   _id: string;
@@ -57,14 +57,14 @@ export default function BrandsPage() {
       <h1 className="text-4xl font-bold mb-8">Brands</h1>
 
       {brands.length === 0 ? (
-        <p className="text-gray-500 text-center">No brands available.</p>
+        <p className="text-muted-foreground text-center">No brands available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {brands.map((brand) => (
             <Link href={`/brands/${brand._id}`} key={brand._id}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
                 <CardContent className="p-0">
-                  <div className="relative w-full aspect-square bg-white flex items-center justify-center">
+                  <div className="relative w-full aspect-square bg-card flex items-center justify-center">
                     <Image
                       src={brand.image}
                       alt={brand.name}

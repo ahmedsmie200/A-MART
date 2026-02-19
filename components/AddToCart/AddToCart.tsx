@@ -17,7 +17,7 @@ export default function AddToCart({ productId }: AddToCartProps) {
   const { data: session } = useSession();
   const [isLoading, setLoading] = useState(false);
   const router = useRouter();
-  
+
   async function handleAddToCart() {
     if (!session?.accessToken) {
       toast.error('Please login first!');
@@ -26,7 +26,7 @@ export default function AddToCart({ productId }: AddToCartProps) {
     }
 
     setLoading(true);
-    
+
     try {
       const res = await fetch('https://ecommerce.routemisr.com/api/v1/cart', {
         method: 'POST',
@@ -38,7 +38,7 @@ export default function AddToCart({ productId }: AddToCartProps) {
       });
 
       const data: CartRes = await res.json();
-      
+
       if (res.ok) {
         toast.success(data.message || 'Product added to cart successfully!');
         router.refresh();
@@ -58,17 +58,21 @@ export default function AddToCart({ productId }: AddToCartProps) {
     }
   }
 
-    return (
-      <CardFooter className="gap-2 p-0">
-        <Button 
-          disabled={isLoading} 
-          onClick={handleAddToCart} 
-          className="flex-1 bg-black text-white hover:bg-gray-800"
-        >
-          {isLoading ? <Loader2 className="animate-spin mr-2" /> : <ShoppingCart className="mr-2" />} 
-          Add To Cart
-        </Button>
-        <WishlistButton productId={productId} />
-      </CardFooter>
+  return (
+    <CardFooter className="gap-1.5 sm:gap-2 p-0">
+      <Button
+        disabled={isLoading}
+        onClick={handleAddToCart}
+        className="flex-1 text-xs sm:text-sm px-2 sm:px-4 bg-primary text-primary-foreground hover:bg-primary/90"
+      >
+        {isLoading
+          ? <Loader2 className="animate-spin mr-1.5 sm:mr-2 w-4 h-4" />
+          : <ShoppingCart className="mr-1.5 sm:mr-2 w-4 h-4" />
+        }
+        <span className="hidden sm:inline">Add To Cart</span>
+        <span className="sm:hidden">Add</span>
+      </Button>
+      <WishlistButton productId={productId} />
+    </CardFooter>
   );
 }

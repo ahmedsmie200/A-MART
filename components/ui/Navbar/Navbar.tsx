@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { UserIcon, ShoppingCartIcon, Heart } from "lucide-react"
+import { UserIcon, ShoppingCartIcon, Heart, Menu, X } from "lucide-react"
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -23,6 +23,7 @@ export default function Navbar() {
   const { data: session } = useSession()
   const [cartCount, setCartCount] = useState(0)
   const [wishlistCount, setWishlistCount] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const updateWishlistCount = () => {
@@ -30,7 +31,7 @@ export default function Navbar() {
       setWishlistCount(localWishlist.length)
     }
 
-    updateWishlistCount() 
+    updateWishlistCount()
     window.addEventListener("wishlistUpdated", updateWishlistCount)
     return () => window.removeEventListener("wishlistUpdated", updateWishlistCount)
   }, [])
@@ -55,16 +56,22 @@ export default function Navbar() {
     }
 
     fetchCartCount()
-  }, [session?.accessToken]) 
+  }, [session?.accessToken])
+
+  // Close menu when route changes
+  const handleLinkClick = () => setMenuOpen(false)
 
   return (
-    <nav className="sticky top-0 z-50 bg-white p-2 border-b shadow-sm">
-      <div className="container mx-auto p-2 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+    <nav className="sticky top-0 z-50 bg-background border-b shadow-sm">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        
+        {/* Logo */}
         <h2 className="text-xl font-bold">
-          <Link href="/">A-Mart</Link>
+          <Link href="/" onClick={handleLinkClick}>A-Mart</Link>
         </h2>
 
-        <div className="flex-1 flex justify-center">
+        {/* Desktop Nav Links */}
+        <div className="hidden md:flex flex-1 justify-center">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -86,43 +93,47 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        {/* Icons + Hamburger */}
+        <div className="flex items-center gap-2">
+          {/* Wishlist */}
           <Link
             href="/wishlist"
-            className="relative flex items-center p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="relative flex items-center p-2 hover:bg-muted rounded-lg transition-colors"
           >
-            <Heart className="h-6 w-6 text-black" />
+            <Heart className="h-6 w-6 text-foreground" />
             {wishlistCount > 0 && (
               <span
                 suppressHydrationWarning
-                className="absolute -top-1 -right-1 bg-black text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
               >
                 {wishlistCount}
               </span>
             )}
           </Link>
 
+          {/* Cart */}
           <Link
             href="/cart"
-            className="relative flex items-center p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="relative flex items-center p-2 hover:bg-muted rounded-lg transition-colors"
           >
-            <ShoppingCartIcon className="h-6 w-6 text-black" />
+            <ShoppingCartIcon className="h-6 w-6 text-foreground" />
             {cartCount > 0 && (
               <span
                 suppressHydrationWarning
-                className="absolute -top-1 -right-1 bg-black text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
               >
                 {cartCount}
               </span>
             )}
           </Link>
 
+          {/* User Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger
               suppressHydrationWarning
-              className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+              className="hover:bg-muted p-2 rounded-lg transition-colors"
             >
-              <UserIcon className="h-6 w-6 text-black cursor-pointer" />
+              <UserIcon className="h-6 w-6 text-foreground cursor-pointer" />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
@@ -154,8 +165,48 @@ export default function Navbar() {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Hamburger - Mobile Only */}
+          <button
+            className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X className="h-6 w-6 text-foreground" />
+            ) : (
+              <Menu className="h-6 w-6 text-foreground" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden border-t bg-background px-4 py-3 flex flex-col gap-3 animate-in slide-in-from-top-2 duration-200">
+          <Link
+            href="/products"
+            onClick={handleLinkClick}
+            className="py-2 px-3 rounded-lg hover:bg-muted transition-colors font-medium"
+          >
+            Products
+          </Link>
+          <Link
+            href="/brands"
+            onClick={handleLinkClick}
+            className="py-2 px-3 rounded-lg hover:bg-muted transition-colors font-medium"
+          >
+            Brands
+          </Link>
+          <Link
+            href="/categories"
+            onClick={handleLinkClick}
+            className="py-2 px-3 rounded-lg hover:bg-muted transition-colors font-medium"
+          >
+            Categories
+          </Link>
+        </div>
+      )}
     </nav>
   )
 }

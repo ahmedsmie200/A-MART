@@ -57,14 +57,14 @@ export default function CategoriesPage() {
       <h1 className="text-4xl font-bold mb-8">Categories</h1>
 
       {categories.length === 0 ? (
-        <p className="text-gray-500 text-center">No categories available.</p>
+        <p className="text-muted-foreground text-center">No categories available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {categories.map((category) => (
             <Link href={`/categories/${category._id}`} key={category._id}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
                 <CardContent className="p-0">
-                  <div className="relative w-full aspect-square bg-white flex items-center justify-center">
+                  <div className="relative w-full aspect-square bg-card flex items-center justify-center">
                     <Image
                       src={category.image}
                       alt={category.name}

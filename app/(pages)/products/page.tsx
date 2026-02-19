@@ -62,9 +62,9 @@ export default function ProductsPage() {
     ));
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {[...Array(8)].map((_, i) => (
             <ProductSkeleton key={i} />
           ))}
@@ -72,61 +72,75 @@ export default function ProductsPage() {
       ) : products.length === 0 ? (
         <p className="text-gray-500 text-center">No products available.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {products.map((product) => (
             <Card
               key={product._id}
-              className="overflow-hidden hover:shadow-lg transition-shadow flex flex-col bg-white"
+              className="overflow-hidden hover:shadow-lg transition-shadow flex flex-col bg-card"
             >
               <Link href={`/products/${product._id}`}>
-                <div className="relative w-full bg-white cursor-pointer hover:bg-gray-50 transition-colors" style={{ paddingBottom: '100%' }}>
+                <div
+                  className="relative w-full bg-card cursor-pointer hover:bg-accent/10 transition-colors"
+                  style={{ paddingBottom: "100%" }}
+                >
                   <Image
                     src={product.imageCover}
                     alt={product.title || "Product"}
                     fill
-                    className="object-contain p-6"
-                    sizes="(max-width: 768px) 100vw, 300px"
+                    className="object-contain p-3 sm:p-6"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, 300px"
                   />
                 </div>
               </Link>
 
-              <CardContent className="p-4 space-y-2 flex-1 flex flex-col">
-                <CardDescription className="text-sm text-gray-500">
+              <CardContent className="p-2 sm:p-4 space-y-1 sm:space-y-2 flex-1 flex flex-col">
+                <CardDescription className="text-xs sm:text-sm text-muted-foreground">
                   {product.brand?.name || "No Brand"}
                 </CardDescription>
 
                 <Link href={`/products/${product._id}`}>
-                  <CardTitle className="text-lg font-bold line-clamp-2 hover:text-gray-600 transition-colors cursor-pointer min-h-14">
+                  <CardTitle className="text-sm sm:text-lg font-bold line-clamp-2 hover:text-muted-foreground transition-colors cursor-pointer min-h-10 sm:min-h-14">
                     {product.title}
                   </CardTitle>
                 </Link>
 
-                <CardDescription className="text-sm text-gray-500">
+                <CardDescription className="text-xs sm:text-sm text-gray-500">
                   {product.category?.name || "No Category"}
                 </CardDescription>
 
-                <div className="flex items-center gap-1 pt-2">
+                <div className="flex items-center gap-1 pt-1 sm:pt-2">
                   <div className="flex">{renderStars(product.ratingsAverage)}</div>
-                  <span className="text-sm text-gray-600 ml-1">
+                  <span className="text-xs sm:text-sm text-muted-foreground ml-1">
                     ({product.ratingsQuantity || 0})
                   </span>
                 </div>
 
-                <div className="text-xl font-bold text-gray-900 mt-auto pt-2">
+                <div className="text-base sm:text-xl font-bold text-card-foreground mt-auto pt-1 sm:pt-2">
                   EGP {product.price.toFixed(2)}
                 </div>
               </CardContent>
 
-              <div className="px-4 pb-4">
+              <div className="px-2 sm:px-4 pb-2 sm:pb-4">
                 {session?.accessToken ? (
                   <AddToCart productId={product._id} />
                 ) : (
                   <Link href="/login">
-                    <button className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <button className="w-full bg-primary text-primary-foreground py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+                      <svg
+                        className="w-4 h-4 sm:w-5 sm:h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
                       </svg>
-                      Add To Cart
+                      <span className="hidden xs:inline">Add To Cart</span>
+                      <span className="xs:hidden">Add</span>
                     </button>
                   </Link>
                 )}
