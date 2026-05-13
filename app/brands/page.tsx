@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import Loading from "@/app/(pages)/products/loading";
+import { Tag } from "lucide-react";
 
 interface Brand {
   _id: string;
@@ -48,40 +48,63 @@ export default function BrandsPage() {
     fetchBrands();
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Brands</h1>
-
-      {brands.length === 0 ? (
-        <p className="text-muted-foreground text-center">No brands available.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {brands.map((brand) => (
-            <Link href={`/brands/${brand._id}`} key={brand._id}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardContent className="p-0">
-                  <div className="relative w-full aspect-square bg-card flex items-center justify-center">
-                    <Image
-                      src={brand.image}
-                      alt={brand.name}
-                      fill
-                      className="object-contain p-8 group-hover:scale-105 transition-transform"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    />
-                  </div>
-                  <div className="p-4 text-center border-t">
-                    <h3 className="font-semibold text-lg">{brand.name}</h3>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+    <div className="min-h-screen bg-background">
+       {/* Page Header */}
+       <div className="bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="flex items-end justify-between">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold tracking-tight">Brands</h1>
+              <p className="text-gray-400 mt-2 text-sm lg:text-base">
+                {loading ? "Loading..." : `Discover ${brands.length} top brands`}
+              </p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
+              <Tag className="w-4 h-4" />
+              <span>All Brands</span>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
+
+      <div className="container mx-auto px-4 py-8 lg:py-12">
+        {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+            </div>
+        ) : brands.length === 0 ? (
+          <div className="text-center py-20">
+             <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Tag className="w-7 h-7 text-gray-400" />
+            </div>
+            <p className="text-gray-500 text-lg font-medium">No brands available.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 lg:gap-6 stagger-children">
+            {brands.map((brand) => (
+              <Link href={`/brands/${brand._id}`} key={brand._id}>
+                <Card className="overflow-hidden border border-gray-100 bg-white rounded-2xl hover:shadow-xl hover:border-primary/10 transition-all duration-500 cursor-pointer group">
+                  <CardContent className="p-0">
+                    <div className="relative w-full aspect-square flex items-center justify-center p-6">
+                      <Image
+                        src={brand.image}
+                        alt={brand.name}
+                        fill
+                        className="object-contain p-6 group-hover:scale-110 transition-transform duration-700 ease-out"
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
+                      />
+                    </div>
+                    <div className="px-4 py-3 text-center border-t border-gray-50 bg-gray-50/50 group-hover:bg-primary transition-colors duration-500">
+                      <h3 className="font-semibold text-xs lg:text-sm text-gray-600 group-hover:text-primary-foreground transition-colors duration-500 truncate uppercase tracking-wider">{brand.name}</h3>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

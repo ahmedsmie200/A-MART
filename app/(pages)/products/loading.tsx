@@ -6,14 +6,14 @@ export default function Loading() {
       <div className="text-center">
      
         <div className="flex items-center justify-center mb-8">
-          <div className="w-12 h-12 bg-black flex items-center justify-center rounded-md mr-3">
-            <span className="text-white font-bold text-2xl">A</span>
+          <div className="w-12 h-12 bg-primary flex items-center justify-center rounded-md mr-3">
+            <span className="text-primary-foreground font-bold text-2xl">A</span>
           </div>
-          <span className="text-3xl font-bold text-black">ShopMart</span>
+          <span className="text-3xl font-bold text-primary">ShopMart</span>
         </div>
 
         <div className="relative flex justify-center">
-          <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
         </div>
       </div>
     </div>

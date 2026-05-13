@@ -129,7 +129,7 @@ const baseUrl = window.location.origin
     <div className="flex gap-2 mt-3">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="flex-1 bg-black text-white hover:bg-gray-800" size="lg">
+          <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" size="lg">
             Pay Online
           </Button>
         </DialogTrigger>
@@ -194,7 +194,7 @@ const baseUrl = window.location.origin
             <Button
               onClick={handleCheckout}
               disabled={isLoading}
-              className="flex-1 bg-black text-white hover:bg-gray-800"
+              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {isLoading && <Loader2 className="animate-spin mr-2" size={16} />}
               Continue to Payment
@@ -205,7 +205,7 @@ const baseUrl = window.location.origin
 
       <Dialog open={cashOpen} onOpenChange={setCashOpen}>
         <DialogTrigger asChild>
-          <Button className="flex-1 bg-black text-white hover:bg-gray-800" size="lg">
+          <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" size="lg">
             Cash on Delivery
           </Button>
         </DialogTrigger>
@@ -270,7 +270,7 @@ const baseUrl = window.location.origin
             <Button
               onClick={handleCashCheckout}
               disabled={isCashLoading}
-              className="flex-1 bg-green-600 text-white hover:bg-green-700"
+              className="flex-1 bg-green-600 text-primary-foreground hover:bg-green-700"
             >
               {isCashLoading && <Loader2 className="animate-spin mr-2" size={16} />}
               Place Order

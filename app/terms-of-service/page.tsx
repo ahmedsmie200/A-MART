@@ -7,12 +7,12 @@ export default function TermsOfServicePage() {
         <p>Last updated: {new Date().toLocaleDateString()}</p>
         
         <section>
-          <h2 className="text-2xl font-semibold mb-4 text-black">Acceptance of Terms</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-primary">Acceptance of Terms</h2>
           <p>By accessing and using this website, you accept and agree to be bound by the terms and provisions of this agreement.</p>
         </section>
         
         <section>
-          <h2 className="text-2xl font-semibold mb-4 text-black">Use License</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-primary">Use License</h2>
           <p>Permission is granted to temporarily download one copy of the materials on A-Mart's website for personal, non-commercial transitory viewing only.</p>
         </section>
       </div>

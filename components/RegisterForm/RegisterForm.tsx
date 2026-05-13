@@ -7,22 +7,8 @@ import * as z from "zod"
 import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Loader2 } from "lucide-react"
+import { Loader2, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import toast from "react-hot-toast"
 
@@ -78,15 +64,14 @@ export default function RegisterForm() {
       const result = await response.json()
 
       if (response.ok) {
-        toast.success("Account created successfully! Please login.")
+        toast.success("Account created successfully!")
         router.push("/login")
       } else {
         setRegisterError(result.message || "Registration failed")
         toast.error(result.message || "Registration failed")
       }
     } catch (error) {
-      console.error("Registration error:", error)
-      setRegisterError("An unexpected error occurred. Please try again.")
+      setRegisterError("An unexpected error occurred.")
       toast.error("Something went wrong!")
     } finally {
       setIsLoading(false)
@@ -94,112 +79,156 @@ export default function RegisterForm() {
   }
 
   return (
-    <Card className="w-full sm:max-w-md mx-auto mt-10">
-      <CardHeader>
-        <CardTitle>Create Account</CardTitle>
-        <CardDescription>
-          Enter your details to create a new account
-        </CardDescription>
-      </CardHeader>
+    <div className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-700">Full Name</label>
+          <Controller
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Input
+                  {...field}
+                  type="text"
+                  placeholder="John Doe"
+                  className={`h-11 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                    fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                />
+                {fieldState.invalid && (
+                  <p className="text-[10px] text-red-500 font-medium">{fieldState.error?.message}</p>
+                )}
+              </>
+            )}
+          />
+        </div>
 
-      <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Full Name</FieldLabel>
-                  <Input {...field} type="text" />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Email</label>
             <Controller
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Email</FieldLabel>
-                  <Input {...field} type="email" />
+                <>
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="you@example.com"
+                    className={`h-11 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                      fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
+                  />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <p className="text-[10px] text-red-500 font-medium">{fieldState.error?.message}</p>
                   )}
-                </Field>
+                </>
               )}
             />
+          </div>
 
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Phone</label>
             <Controller
               name="phone"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Phone Number</FieldLabel>
-                  <Input {...field} type="tel" />
+                <>
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="01234567890"
+                    className={`h-11 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                      fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
+                  />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <p className="text-[10px] text-red-500 font-medium">{fieldState.error?.message}</p>
                   )}
-                </Field>
+                </>
               )}
             />
+          </div>
+        </div>
 
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Password</label>
             <Controller
               name="password"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Password</FieldLabel>
-                  <Input {...field} type="password" />
+                <>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="••••••••"
+                    className={`h-11 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                      fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
+                  />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <p className="text-[10px] text-red-500 font-medium">{fieldState.error?.message}</p>
                   )}
-                </Field>
+                </>
               )}
             />
+          </div>
 
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700">Confirm</label>
             <Controller
               name="rePassword"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Confirm Password</FieldLabel>
-                  <Input {...field} type="password" />
+                <>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="••••••••"
+                    className={`h-11 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                      fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
+                  />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <p className="text-[10px] text-red-500 font-medium">{fieldState.error?.message}</p>
                   )}
-                </Field>
+                </>
               )}
             />
-          </FieldGroup>
+          </div>
+        </div>
 
-          {registerError && (
-            <p className="text-sm text-red-500 mt-2">{registerError}</p>
-          )}
-        </form>
-      </CardContent>
+        {registerError && (
+          <div className="p-3 mt-2 rounded-xl bg-red-50 border border-red-100 text-sm text-red-600 font-medium text-center">
+            {registerError}
+          </div>
+        )}
 
-      <CardFooter className="flex flex-col gap-3">
-        <Button 
-          disabled={isLoading} 
-          type="submit" 
-          onClick={form.handleSubmit(onSubmit)} 
-          className="w-full"
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="w-full h-12 mt-6 bg-slate-950 text-white hover:bg-primary rounded-xl font-semibold transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] group"
         >
-          {isLoading && <Loader2 className="animate-spin mr-2" size={16} />}
-          Create Account
+          {isLoading ? (
+            <Loader2 className="animate-spin" size={18} />
+          ) : (
+            <span className="flex items-center gap-2">
+              Create account
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          )}
         </Button>
+      </form>
 
-        <p className="text-sm text-center text-gray-600">
-          Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
-            Login here
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+      <div className="mt-8 text-center text-sm font-medium text-slate-500">
+        Already have an account?{" "}
+        <Link href="/login" className="font-bold text-primary hover:text-primary/80 transition-colors">
+          Log in
+        </Link>
+      </div>
+    </div>
   )
 }

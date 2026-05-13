@@ -8,22 +8,8 @@ import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {  Loader2 } from "lucide-react"
+import { Loader2, ArrowRight } from "lucide-react"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required."),
@@ -42,7 +28,7 @@ export default function LoginForm() {
     },
   })
 
- const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const redirectUrl = searchParams.get("callbackUrl") || "/"
 
   const [loginError, setLoginError] = React.useState<string | null>(null)
@@ -56,92 +42,110 @@ export default function LoginForm() {
       const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        callbackUrl: redirectUrl? redirectUrl : "/",
-        redirect: true, 
-        
+        callbackUrl: redirectUrl ? redirectUrl : "/",
+        redirect: false,
       })
-      
-      console.log("signIn response:", response)
 
       if (response?.error) {
         setLoginError("Invalid email or password")
         form.setError("password", { message: "Invalid email or password" })
       } else if (response?.ok) {
         router.push("/products")
+        router.refresh()
       }
     } catch (error) {
-      setLoginError("An unexpected error occurred. Please try again.")
+      setLoginError("An unexpected error occurred.")
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <Card className="w-full sm:max-w-md mx-auto mt-10">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>
-          Enter your email and password to login.
-        </CardDescription>
-      </CardHeader>
+    <div className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <div className="space-y-1.5">
+          <label className="text-sm font-semibold text-slate-700">
+            Email
+          </label>
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="you@example.com"
+                  className={`h-12 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                    fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                />
+                {fieldState.invalid && (
+                  <p className="text-xs text-red-500 font-medium">{fieldState.error?.message}</p>
+                )}
+              </>
+            )}
+          />
+        </div>
 
-      <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Email</FieldLabel>
-                  <Input {...field} type="email" />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-semibold text-slate-700">
+              Password
+            </label>
+            <Link href="#" className="text-xs font-bold text-primary hover:text-primary/80 transition-colors">
+              Forgot password?
+            </Link>
+          </div>
+          <Controller
+            name="password"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="••••••••"
+                  className={`h-12 bg-slate-50 border-slate-200 focus:bg-white focus:ring-primary/20 transition-all rounded-xl shadow-sm text-sm ${
+                    fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                />
+                {fieldState.invalid && (
+                  <p className="text-xs text-red-500 font-medium">{fieldState.error?.message}</p>
+                )}
+              </>
+            )}
+          />
+        </div>
 
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Password</FieldLabel>
-                  <Input {...field} type="password" />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
+        {loginError && (
+          <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-sm text-red-600 font-medium text-center">
+            {loginError}
+          </div>
+        )}
 
-<div className="flex justify-between items-center mt-2">
-  <Link href="#" className="text-sm text-blue-600 hover:underline">
-    Change Password
-  </Link>
-  <Link href="#" className="text-sm text-blue-600 hover:underline">
-    Forgot Password?
-  </Link>
-</div>
-          
-        </form>
-      </CardContent>
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="w-full h-12 mt-4 bg-slate-950 text-white hover:bg-primary rounded-xl font-semibold transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] group"
+        >
+          {isLoading ? (
+            <Loader2 className="animate-spin" size={18} />
+          ) : (
+            <span className="flex items-center gap-2">
+              Sign in to account
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          )}
+        </Button>
+      </form>
 
-      <CardFooter className="flex flex-col gap-3">
-  <Button disabled={isLoading} type="submit" onClick={form.handleSubmit(onSubmit)} className="w-full">
-    {isLoading && <Loader2 className="animate-spin mr-2" size={16} />}
-    Login
-  </Button>
-
- <p className="text-sm text-center text-gray-600">
-  Don't have an account?{" "}
-  <a href="/register" className="text-blue-600 hover:underline cursor-pointer">
-    Create one here
-  </a>
-</p>
-</CardFooter>
-    </Card>
+      <div className="mt-8 text-center text-sm font-medium text-slate-500">
+        Don't have an account?{" "}
+        <Link href="/register" className="font-bold text-primary hover:text-primary/80 transition-colors">
+          Sign up
+        </Link>
+      </div>
+    </div>
   )
 }

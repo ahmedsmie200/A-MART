@@ -37,7 +37,7 @@ export default function WishlistButton({ productId }: WishlistButtonProps) {
         }
         localStorage.setItem('wishlist', JSON.stringify(localWishlist));
         setIsInWishlist(true);
-        toast.success("Added to wishlist");
+        toast.success("Saved to wishlist");
 
         window.dispatchEvent(new Event('wishlistUpdated'));
 
@@ -78,14 +78,14 @@ export default function WishlistButton({ productId }: WishlistButtonProps) {
     <button
       onClick={toggleWishlist}
       disabled={isLoading}
-      className={`p-3 border rounded-lg transition-colors ${isInWishlist
-        ? "bg-red-50 border-red-500 hover:bg-red-100"
-        : "border-muted-foreground/20 hover:bg-muted"
+      className={`w-full h-full flex items-center justify-center rounded-xl transition-all duration-300 ${isInWishlist
+        ? "bg-red-50 border-transparent hover:bg-red-100"
+        : "bg-gray-50 hover:bg-gray-100 border-transparent"
         } disabled:opacity-50`}
       aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
     >
       <Heart
-        className={`w-5 h-5 ${isInWishlist ? "text-red-500 fill-red-500" : "text-muted-foreground"
+        className={`w-5 h-5 transition-colors duration-300 ${isInWishlist ? "text-red-500 fill-red-500" : "text-gray-400"
           }`}
       />
     </button>

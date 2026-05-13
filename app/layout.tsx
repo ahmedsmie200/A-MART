@@ -1,6 +1,7 @@
 "use client"
 import type { Metadata } from "next"
 import "./globals.css"
+
 import Navbar from "@/components/ui/Navbar/Navbar"
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/ui/Footer/Footer";

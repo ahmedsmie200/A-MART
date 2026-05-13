@@ -7,12 +7,12 @@ export default function PrivacyPolicyPage() {
         <p>Last updated: {new Date().toLocaleDateString()}</p>
         
         <section>
-          <h2 className="text-2xl font-semibold mb-4 text-black">Information We Collect</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-primary">Information We Collect</h2>
           <p>We collect information you provide directly to us, including name, email address, shipping address, and payment information.</p>
         </section>
         
         <section>
-          <h2 className="text-2xl font-semibold mb-4 text-black">How We Use Your Information</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-primary">How We Use Your Information</h2>
           <ul className="list-disc list-inside space-y-2">
             <li>Process and fulfill your orders</li>
             <li>Send order confirmations and updates</li>
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
         </section>
         
         <section>
-          <h2 className="text-2xl font-semibold mb-4 text-black">Data Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-primary">Data Security</h2>
           <p>We implement industry-standard security measures to protect your personal information.</p>
         </section>
       </div>

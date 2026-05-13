@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CartRes } from "@/interfaces/CartInterfacrs";
 import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import CheckOutSession from "../CheckOutSession/CheckOutSession";
 
 interface CartProps {
@@ -23,11 +23,18 @@ export default function Cart({ cartData, token, userId }: CartProps) {
 
   if (!cartData) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold tracking-tight mb-4">Your Cart is Empty</h1>
-        <p className="text-muted-foreground mb-6">Add some items to get started!</p>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 bg-background">
+        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+          <ShoppingBag className="w-10 h-10 text-gray-400" />
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight mb-3">Your Cart is Empty</h1>
+        <p className="text-gray-500 mb-8 max-w-sm text-center">
+          Looks like you haven't added anything to your cart yet. Discover our latest collections!
+        </p>
         <Link href="/products">
-          <Button size="lg">Continue Shopping</Button>
+          <Button size="lg" className="rounded-full px-8 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] transition-all">
+            Continue Shopping
+          </Button>
         </Link>
       </div>
     );
@@ -57,7 +64,6 @@ export default function Cart({ cartData, token, userId }: CartProps) {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Quantity updated!');
         router.refresh();
       } else {
         toast.error(data.message || 'Failed to update quantity');
@@ -75,8 +81,6 @@ export default function Cart({ cartData, token, userId }: CartProps) {
   };
 
   const removeItem = async (productId: string) => {
-    if (!confirm('Remove this item from cart?')) return;
-
     setUpdatingItems(prev => new Set(prev).add(productId));
 
     try {
@@ -91,7 +95,7 @@ export default function Cart({ cartData, token, userId }: CartProps) {
       );
 
       if (response.ok) {
-        toast.success('Item removed!');
+        toast.success('Item removed');
         router.refresh();
       } else {
         toast.error('Failed to remove item');
@@ -132,150 +136,173 @@ export default function Cart({ cartData, token, userId }: CartProps) {
     }
   };
 
-  return <>
-    {cart ?
-      <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold tracking-tight">Shopping Cart</h1>
-        <p className="text-muted-foreground mt-1">
-          {itemCount} items in your cart
-        </p>
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="flex items-end justify-between">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold tracking-tight">Shopping Cart</h1>
+              <p className="text-gray-400 mt-2 text-sm lg:text-base">
+                {itemCount} {itemCount === 1 ? 'item' : 'items'} in your cart
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start mt-6">
-          <div className="lg:col-span-2 space-y-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          
+          {/* Cart Items */}
+          <div className="lg:col-span-8 space-y-4">
             {cart.products?.map((item) => {
               const product = typeof item.product === 'string' ? null : item.product;
-              const isUpdating = updatingItems.has(item.product as string);
+              const isUpdating = updatingItems.has(product?._id as string);
 
               if (!product) {
                 return (
-                  <div key={item._id} className="flex gap-4 rounded-xl border p-4 shadow-sm bg-card">
-                    <div className="w-24 h-24 bg-muted rounded-lg animate-pulse" />
-                    <div className="flex-1">
-                      <p className="text-sm text-muted-foreground">Loading product details...</p>
+                  <div key={item._id} className="flex gap-4 rounded-2xl border border-gray-100 p-4 shadow-sm bg-white animate-pulse">
+                    <div className="w-24 h-24 bg-gray-100 rounded-xl" />
+                    <div className="flex-1 space-y-3 py-2">
+                      <div className="h-4 bg-gray-100 rounded w-1/3"></div>
+                      <div className="h-3 bg-gray-100 rounded w-1/4"></div>
                     </div>
                   </div>
                 );
               }
 
               return (
-                <div key={item._id} className="flex gap-4 rounded-xl border p-4 shadow-sm bg-card relative">
+                <div key={item._id} className="flex flex-col sm:flex-row gap-4 sm:gap-6 rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm bg-white relative transition-all hover:shadow-md">
                   {isUpdating && (
-                    <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-xl">
-                      <Loader2 className="animate-spin" />
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded-2xl z-10">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
                     </div>
                   )}
 
-                  <img
-                    src={product.imageCover}
-                    alt={product.title}
-                    className="w-24 h-24 rounded-lg object-cover md:w-28 md:h-28"
-                  />
+                  <div className="w-full sm:w-32 h-32 sm:h-auto shrink-0 bg-gray-50 rounded-xl overflow-hidden relative">
+                    <img
+                      src={product.imageCover}
+                      alt={product.title}
+                      className="absolute inset-0 w-full h-full object-contain p-2"
+                    />
+                  </div>
 
-                  <div className="flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h3 className="font-semibold text-base md:text-lg line-clamp-2">
+                        <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">
+                          {product.brand?.name}
+                        </p>
+                        <h3 className="font-semibold text-sm sm:text-base line-clamp-2 leading-snug">
                           {product.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {product.brand?.name} · {product.category?.name}
+                        <p className="text-xs text-gray-400 mt-1.5">
+                          {product.category?.name}
                         </p>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className="font-semibold">
+                        <div className="font-bold text-base sm:text-lg">
                           {formatCurrency(item.price)}
                         </div>
                       </div>
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-
+                    <div className="flex items-end justify-between mt-4">
+                      {/* Quantity Selector */}
+                      <div className="flex items-center gap-1 bg-gray-50 border border-gray-100 rounded-lg p-1">
                         <button
                           onClick={() => updateQuantity(product._id, item.count - 1)}
                           disabled={isUpdating || item.count <= 1}
                           aria-label="decrease"
-                          className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white hover:shadow-sm disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:shadow-none transition-all"
                         >
-                          -
+                          <Minus className="w-3.5 h-3.5" />
                         </button>
-
-                        <span className="w-6 text-center font-medium">
+                        <span className="w-8 text-center text-sm font-semibold">
                           {item.count}
                         </span>
-
-
                         <button
                           onClick={() => updateQuantity(product._id, item.count + 1)}
                           disabled={isUpdating}
                           aria-label="increase"
-                          className="size-8 rounded-lg border hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white hover:shadow-sm disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:shadow-none transition-all"
                         >
-                          +
+                          <Plus className="w-3.5 h-3.5" />
                         </button>
                       </div>
-
 
                       <button
                         onClick={() => removeItem(product._id)}
                         disabled={isUpdating}
-                        className="text-sm text-destructive hover:underline disabled:opacity-50"
+                        className="text-xs text-gray-400 hover:text-red-500 font-medium flex items-center gap-1.5 transition-colors group"
                       >
-                        Remove
+                        <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        <span>Remove</span>
                       </button>
                     </div>
                   </div>
                 </div>
               );
             })}
+            
+            <div className="flex justify-between items-center pt-4">
+               <Link href="/products" className="text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all">
+                  <ArrowRight className="w-4 h-4 rotate-180" /> Continue Shopping
+               </Link>
+               <button
+                  onClick={handleClearCart}
+                  disabled={isClearing}
+                  className="text-sm text-gray-400 hover:text-red-500 font-medium transition-colors"
+                >
+                  {isClearing ? "Clearing..." : "Clear Cart"}
+                </button>
+            </div>
           </div>
 
-          <div className="lg:col-span-1 sticky top-18">
-            <div className="rounded-xl border p-5 shadow-sm bg-card">
-              <h2 className="text-lg font-semibold">Order Summary</h2>
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Subtotal ({itemCount} items)
-                  </span>
-                  <span className="font-semibold">
-                    {formatCurrency(cart.totalCartPrice)}
-                  </span>
+          {/* Order Summary */}
+          <div className="lg:col-span-4 lg:sticky lg:top-24">
+            <div className="rounded-2xl border border-gray-100 p-6 shadow-xl shadow-gray-200/20 bg-white">
+              <h2 className="text-lg font-bold mb-6">Order Summary</h2>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Subtotal</span>
+                  <span className="font-semibold">{formatCurrency(cart.totalCartPrice)}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Shipping</span>
-                  <span className="text-emerald-600 font-medium">Free</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Shipping Estimate</span>
+                  <span className="text-green-600 font-medium tracking-wide">FREE</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Tax</span>
+                  <span className="font-semibold">{formatCurrency(0)}</span>
                 </div>
               </div>
 
-              <div className="my-4 border-t" />
+              <div className="my-6 border-t border-dashed border-gray-200" />
 
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">Total</span>
-                <span className="text-lg font-bold">
+              <div className="flex items-center justify-between mb-8">
+                <span className="text-base font-bold">Total</span>
+                <span className="text-xl lg:text-2xl font-black">
                   {formatCurrency(cart.totalCartPrice)}
                 </span>
               </div>
 
-              <Link href="/products">
-                <Button className="w-full mt-6" size="lg">
-                  Continue Shopping
-                </Button>
-              </Link>
-              <CheckOutSession cartId={cartData.cartId || ''} />
-
-              <button
-                onClick={handleClearCart}
-                disabled={isClearing}
-                className="w-full mt-3 text-destructive hover:underline text-sm disabled:opacity-50"
-              >
-                {isClearing ? "Clearing..." : "Clear Cart"}
-              </button>
+              <div className="space-y-3">
+                 <CheckOutSession cartId={cartData.cartId || ''} />
+              </div>
+              
+              <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Secure Checkout
+              </div>
             </div>
           </div>
+
         </div>
       </div>
-      : null}
-  </>
+    </div>
+  );
 }

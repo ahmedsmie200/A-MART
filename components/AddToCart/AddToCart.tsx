@@ -1,7 +1,6 @@
 "use client"
-import { Loader2, ShoppingCart } from "lucide-react";
+import { Loader2, ShoppingBag, Heart } from "lucide-react";
 import { Button } from "../ui/button";
-import { CardFooter } from "../ui/card";
 import { CartRes } from "@/interfaces/CartInterfacrs";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -40,7 +39,7 @@ export default function AddToCart({ productId }: AddToCartProps) {
       const data: CartRes = await res.json();
 
       if (res.ok) {
-        toast.success(data.message || 'Product added to cart successfully!');
+        toast.success(data.message || 'Product added to cart!');
         router.refresh();
       } else {
         if (res.status === 401) {
@@ -59,20 +58,21 @@ export default function AddToCart({ productId }: AddToCartProps) {
   }
 
   return (
-    <CardFooter className="gap-1.5 sm:gap-2 p-0">
+    <div className="flex items-center gap-2 w-full">
       <Button
         disabled={isLoading}
         onClick={handleAddToCart}
-        className="flex-1 text-xs sm:text-sm px-2 sm:px-4 bg-primary text-primary-foreground hover:bg-primary/90"
+        className="flex-1 h-11 sm:h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2"
       >
         {isLoading
-          ? <Loader2 className="animate-spin mr-1.5 sm:mr-2 w-4 h-4" />
-          : <ShoppingCart className="mr-1.5 sm:mr-2 w-4 h-4" />
+          ? <Loader2 className="animate-spin w-4 h-4" />
+          : <ShoppingBag className="w-4 h-4" />
         }
-        <span className="hidden sm:inline">Add To Cart</span>
-        <span className="sm:hidden">Add</span>
+        <span>Add To Cart</span>
       </Button>
-      <WishlistButton productId={productId} />
-    </CardFooter>
+      <div className="shrink-0 h-11 w-11 sm:h-12 sm:w-12">
+         <WishlistButton productId={productId} />
+      </div>
+    </div>
   );
 }
