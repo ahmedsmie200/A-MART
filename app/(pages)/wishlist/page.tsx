@@ -225,8 +225,7 @@ export default function WishlistPage() {
 
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-50">
                   <span className="font-bold text-lg">
-                    {formatCurrency(product.price)}
-                  </span>
+{product.price.toLocaleString('en-EG')} EGP                  </span>
                 </div>
 
                 <Button
